@@ -7,8 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:life_counter/blocs/menus_bloc.dart';
 
-
-
+//region Center Menu
 class CenterMenu extends StatefulWidget {
   const CenterMenu({
     super.key,
@@ -89,11 +88,11 @@ class CenterAnimation extends StatelessWidget {
                               alignment: Alignment.center,
                               children: <Widget>[
                                 Transform.translate(
-                                  offset: Offset(75, 75 - (scale.value * 75)),
+                                  offset: Offset(0, -(scale.value * 75)),
                                   child: const PlayersMenu(),
                                 ),
                                 Transform.translate(
-                                  offset: Offset((scale.value * 75) + 75, 75),
+                                  offset: Offset(scale.value * 75, 0),
                                   child: Container(
                                     width: 50,
                                     height: 50,
@@ -104,7 +103,7 @@ class CenterAnimation extends StatelessWidget {
                                   ),
                                 ),
                                 Transform.translate(
-                                  offset: Offset(75, 75 + (scale.value * 75)),
+                                  offset: Offset(0, scale.value * 75),
                                   child: GestureDetector(
                                     onTap: () {
                                       context
@@ -132,7 +131,7 @@ class CenterAnimation extends StatelessWidget {
                                   ),
                                 ),
                                 Transform.translate(
-                                  offset: Offset(75 - (scale.value * 75), 75),
+                                  offset: Offset(-(scale.value * 75), 0),
                                   child: Container(
                                     width: 50,
                                     height: 50,
@@ -154,6 +153,10 @@ class CenterAnimation extends StatelessWidget {
                   child: GestureDetector(
                     behavior: HitTestBehavior.deferToChild,
                     onTap: () {
+                      MenusState state = context.read<MenusBloc>().state;
+                      if(state is MenusLoaded){
+                        print(state.playersOpen);
+                      }
                       context.read<MenusBloc>().add(ToggleCenter());
                     },
                     child: Container(
@@ -173,7 +176,9 @@ class CenterAnimation extends StatelessWidget {
     );
   }
 }
+//endregion
 
+//region Players Menu
 class PlayersMenu extends StatefulWidget {
 
   const PlayersMenu({
@@ -256,7 +261,7 @@ class PlayerAnimation extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   Transform.translate(
-                    offset: Offset((scale.value * 75), 75),
+                    offset: Offset((scale.value * 75), 0),
                     child: Container(
                       width: 50,
                       height: 50,
@@ -275,4 +280,5 @@ class PlayerAnimation extends StatelessWidget {
     );
   }
 }
+//endregion
 
