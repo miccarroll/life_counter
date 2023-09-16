@@ -90,7 +90,7 @@ class CenterAnimation extends StatelessWidget {
                               children: <Widget>[
                                 Transform.translate(
                                   offset: Offset(75, 75 - (scale.value * 75)),
-                                  child: PlayersMenu(),
+                                  child: const PlayersMenu(),
                                 ),
                                 Transform.translate(
                                   offset: Offset((scale.value * 75) + 75, 75),
