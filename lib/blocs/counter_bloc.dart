@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
@@ -13,6 +14,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<AddLife>(_onAddLife);
     on<RemoveLife>(_onRemoveLife);
     on<ResetLife>(_onResetLife);
+    on<ChangeLayout>(_onChangeLayout);
   }
 
   void _onLoadCounter(LoadCounter event, Emitter<CounterState> emit) {
@@ -51,6 +53,18 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       newState.counters.forEach((counter) {
         counter.life = newState.baseLife;
       });
+      emit(newState);
+    }
+  }
+
+  void _onChangeLayout(ChangeLayout event, Emitter<CounterState> emit) {
+    final state = this.state;
+    if (state is CounterLoaded) {
+      CounterLoaded newState = CounterLoaded(counters: const <Counter>[], baseLife: state.baseLife);
+      for(int i = 0; i < event.playerNum;i++){
+        Counter newCounter = Counter(id:i,life: newState.baseLife);
+        newState.counters.add(newCounter);
+      }
       emit(newState);
     }
   }

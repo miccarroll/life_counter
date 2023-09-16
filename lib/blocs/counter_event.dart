@@ -29,3 +29,11 @@ class RemoveLife extends CounterEvent{
   List<Object> get props => [life,counterId];
 }
 
+class ChangeLayout extends CounterEvent{
+  final int playerNum;
+  const ChangeLayout ({required this.playerNum});
+
+  @override
+  List<Object> get props => [playerNum];
+}
+

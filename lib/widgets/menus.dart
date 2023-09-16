@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:life_counter/blocs/counter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -35,11 +33,8 @@ class _CenterMenuState extends State<CenterMenu>
 }
 
 class CenterAnimation extends StatelessWidget {
-  CenterAnimation({super.key, required this.controller}) :
-        scale = Tween<double>(
-            begin: 0,
-            end: 1.0
-        ).animate(
+  CenterAnimation({super.key, required this.controller})
+      : scale = Tween<double>(begin: 0, end: 1.0).animate(
             CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn));
 
   final AnimationController controller;
@@ -57,7 +52,8 @@ class CenterAnimation extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<MenusBloc, MenusState>(
         listenWhen: (prev, curr) {
-          return (prev is MenusLoaded && curr is MenusLoaded &&
+          return (prev is MenusLoaded &&
+              curr is MenusLoaded &&
               prev.centerOpen != curr.centerOpen);
         },
         listener: (context, state) {
@@ -67,7 +63,7 @@ class CenterAnimation extends StatelessWidget {
             } else {
               _close();
             }
-          }else{
+          } else {
             _close();
           }
         },
@@ -118,15 +114,14 @@ class CenterAnimation extends StatelessWidget {
                                       height: 50,
                                       decoration: BoxDecoration(
                                         color: Colors.red,
-                                        borderRadius: BorderRadius.circular(
-                                            25),
+                                        borderRadius: BorderRadius.circular(25),
                                       ),
                                       child: const Center(
                                           child: FaIcon(
-                                            FontAwesomeIcons.rotateRight,
-                                            size: 20,
-                                            color: Colors.black,
-                                          )),
+                                        FontAwesomeIcons.rotateRight,
+                                        size: 20,
+                                        color: Colors.black,
+                                      )),
                                     ),
                                   ),
                                 ),
@@ -154,7 +149,7 @@ class CenterAnimation extends StatelessWidget {
                     behavior: HitTestBehavior.deferToChild,
                     onTap: () {
                       MenusState state = context.read<MenusBloc>().state;
-                      if(state is MenusLoaded){
+                      if (state is MenusLoaded) {
                         print(state.playersOpen);
                       }
                       context.read<MenusBloc>().add(ToggleCenter());
@@ -172,15 +167,13 @@ class CenterAnimation extends StatelessWidget {
               ],
             );
           },
-        )
-    );
+        ));
   }
 }
 //endregion
 
 //region Players Menu
 class PlayersMenu extends StatefulWidget {
-
   const PlayersMenu({
     super.key,
   });
@@ -202,16 +195,15 @@ class _PlayersMenuState extends State<PlayersMenu>
 
   @override
   Widget build(BuildContext context) {
-    return PlayerAnimation(controller: controller,);
+    return PlayerAnimation(
+      controller: controller,
+    );
   }
 }
 
 class PlayerAnimation extends StatelessWidget {
-  PlayerAnimation({super.key, required this.controller}) :
-        scale = Tween<double>(
-            begin: 0.0,
-            end: 1.0
-        ).animate(
+  PlayerAnimation({super.key, required this.controller})
+      : scale = Tween<double>(begin: 0.0, end: 1.0).animate(
             CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn));
 
   final AnimationController controller;
@@ -229,7 +221,8 @@ class PlayerAnimation extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<MenusBloc, MenusState>(
       listenWhen: (prev, curr) {
-        return (prev is MenusLoaded && curr is MenusLoaded &&
+        return (prev is MenusLoaded &&
+            curr is MenusLoaded &&
             prev.playersOpen != curr.playersOpen);
       },
       listener: (context, state) {
@@ -239,7 +232,7 @@ class PlayerAnimation extends StatelessWidget {
           } else {
             _close();
           }
-        }else{
+        } else {
           _close();
         }
       },
@@ -250,18 +243,37 @@ class PlayerAnimation extends StatelessWidget {
             onTap: () {
               context.read<MenusBloc>().add(TogglePlayers());
             },
-            child: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.yellow,
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Transform.translate(
-                    offset: Offset((scale.value * 75), 0),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Transform.translate(
+                  offset: Offset((scale.value * 30), -(scale.value * 80)),
+                  child: buildPlayerButton(context,4),
+                ),
+                Transform.translate(
+                  offset: Offset((scale.value * 70), -(scale.value * 40)),
+                  child: buildPlayerButton(context,5),
+                ),
+                Transform.translate(
+                  offset: Offset((scale.value * 80), (scale.value * 15)),
+                  child: buildPlayerButton(context,6),
+                ),
+                Transform.translate(
+                  offset: Offset(-(scale.value * 80), (scale.value * 15)),
+                  child: buildPlayerButton(context,1),
+                ),
+                Transform.translate(
+                  offset: Offset(-(scale.value * 70), -(scale.value * 40)),
+                  child: buildPlayerButton(context,2),
+                ),
+                Transform.translate(
+                  offset: Offset(-(scale.value * 30), -(scale.value * 80)),
+                  child: buildPlayerButton(context,3),
+                ),
+                GestureDetector(
+                    onTap: () {
+                      context.read<MenusBloc>().add(TogglePlayers());
+                    },
                     child: Container(
                       width: 50,
                       height: 50,
@@ -269,16 +281,55 @@ class PlayerAnimation extends StatelessWidget {
                         color: Colors.yellow,
                         borderRadius: BorderRadius.circular(25),
                       ),
-                    ),
-                  )
-                ],
-              ),
+                    ))
+              ],
             ),
           );
         },
       ),
     );
   }
+
+  GestureDetector buildPlayerButton(BuildContext context,final int playerNum) {
+    final String imagePath = () {
+      switch (playerNum) {
+        case 1:
+          return "assets/life_counter_grids-1p.png";
+        case 2:
+          return "assets/life_counter_grids-2p.png";
+        case 3:
+          return "assets/life_counter_grids-3p.png";
+        case 4:
+          return "assets/life_counter_grids-4p.png";
+        case 5:
+          return "assets/life_counter_grids-5p.png";
+        case 6:
+          return "assets/life_counter_grids-6p.png";
+        default:
+          return "assets/life_counter_grids-4p.png";
+      }
+    }();
+
+    return GestureDetector(
+      onTap: () {
+        context.read<CounterBloc>().add(ChangeLayout(playerNum: playerNum));
+      },
+      child: Container(
+        alignment: Alignment.center,
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.contain,
+          width: 40,
+          height: 40,
+        ),
+      ),
+    );
+  }
 }
 //endregion
-
